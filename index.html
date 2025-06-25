@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculadora xG - Poisson (Modo Oscuro)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #121212;
+      --text-dark: #f1f1f1;
+      --box-dark: #1e1e1e;
+      --primary: #3498db;
+      --primary-dark: #2980b9;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 850px;
+      margin: auto;
+      background-color: var(--box-dark);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .header img {
+      width: 80px;
+      margin-right: 15px;
+    }
+
+    h2 {
+      font-size: 26px;
+      margin: 0;
+    }
+
+    label {
+      margin-top: 20px;
+      font-weight: 600;
+      display: block;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      font-size: 16px;
+      background-color: #2a2a2a;
+      color: white;
+    }
+
+    button.calculate {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 14px;
+      font-size: 16px;
+      border-radius: 12px;
+      margin-top: 25px;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s ease;
+    }
+
+    button.calculate:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .result {
+      margin-top: 30px;
+      background-color: rgba(52, 152, 219, 0.15);
+      padding: 20px;
+      border-radius: 12px;
+      font-size: 15px;
+      white-space: pre-wrap;
+    }
+
+    @media (max-width: 600px) {
+      h2 {
+        font-size: 22px;
+      }
+      .header img {
+        width: 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <!-- Reemplaza por tu logo -->
+      <img src="logo.png" alt="Logo">
+      <h2>Calculadora de Probabilidades de Goles RUSHAPO</h2>
+    </div>
+
+    <label>xG del Equipo 1:</label>
+    <input type="number" id="xg1" step="0.01" placeholder="Ej: 1.98">
+
+    <label>xG del Equipo 2:</label>
+    <input type="number" id="xg2" step="0.01" placeholder="Ej: 0.49">
+
+    <button class="calculate" onclick="calcularTodo()">Calcular</button>
+
+    <div id="resultados" class="result"></div>
+  </div>
+
+  <script>
+    function factorial(n) {
+      if (n === 0 || n === 1) return 1;
+      let res = 1;
+      for (let i = 2; i <= n; i++) res *= i;
+      return res;
+    }
+
+    function poisson(k, lambda) {
+      return (Math.pow(Math.E, -lambda) * Math.pow(lambda, k)) / factorial(k);
+    }
+
+    function calcularTodo() {
+      const xg1 = parseFloat(document.getElementById('xg1').value);
+      const xg2 = parseFloat(document.getElementById('xg2').value);
+      const maxGoles = 5;
+      let res = '';
+
+      if (isNaN(xg1) || isNaN(xg2)) {
+        document.getElementById('resultados').innerHTML = "<p style='color:red;'>Introduce valores válidos para ambos equipos.</p>";
+        return;
+      }
+
+      let probs1 = [], probs2 = [];
+      for (let k = 0; k < maxGoles; k++) {
+        probs1[k] = poisson(k, xg1);
+        probs2[k] = poisson(k, xg2);
+      }
+      probs1[5] = 1 - probs1.slice(0, 5).reduce((a, b) => a + b, 0);
+      probs2[5] = 1 - probs2.slice(0, 5).reduce((a, b) => a + b, 0);
+
+      res += `🔹 Probabilidades de goles del Equipo 1 (xG = ${xg1}):\n`;
+      for (let i = 0; i < 5; i++) res += `P(${i} goles) ≈ ${(probs1[i] * 100).toFixed(1)}%\n`;
+      res += `P(5+ goles) ≈ ${(probs1[5] * 100).toFixed(1)}%\n\n`;
+
+      res += `🔹 Probabilidades de goles del Equipo 2 (xG = ${xg2}):\n`;
+      for (let i = 0; i < 5; i++) res += `P(${i} goles) ≈ ${(probs2[i] * 100).toFixed(1)}%\n`;
+      res += `P(5+ goles) ≈ ${(probs2[5] * 100).toFixed(1)}%\n\n`;
+
+      res += `🔹 Combinaciones de Resultados (0 a 4 goles):\n`;
+      let victoria1 = 0, empate = 0, victoria2 = 0;
+
+      for (let g1 = 0; g1 <= 4; g1++) {
+        for (let g2 = 0; g2 <= 4; g2++) {
+          const p = probs1[g1] * probs2[g2];
+          res += `Resultado ${g1} - ${g2} ≈ ${(p * 100).toFixed(2)}%\n`;
+          if (g1 > g2) victoria1 += p;
+          else if (g1 === g2) empate += p;
+          else victoria2 += p;
+        }
+      }
+
+      res += `\n🔹 Probabilidades Totales:\n`;
+      res += `Victoria Equipo 1: ${(victoria1 * 100).toFixed(2)}%\n`;
+      res += `Empate: ${(empate * 100).toFixed(2)}%\n`;
+      res += `Victoria Equipo 2: ${(victoria2 * 100).toFixed(2)}%\n`;
+
+      document.getElementById('resultados').innerHTML = res;
+    }
+  </script>
+
+</body>
+</html>
