@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Calculadora Rushapera Prob. de goles</title>
+  <title>Calculadora de Promedio de Goles Rushapo </title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -37,7 +37,7 @@
     }
 
     .header img {
-      width: 80px;
+      width: 60px;
       margin-right: 15px;
     }
 
@@ -47,7 +47,7 @@
     }
 
     label {
-      margin-top: 20px;
+      margin-top: 15px;
       font-weight: 600;
       display: block;
     }
@@ -94,7 +94,7 @@
         font-size: 22px;
       }
       .header img {
-        width: 40px;
+        width: 45px;
       }
     }
   </style>
@@ -103,16 +103,21 @@
 
   <div class="container">
     <div class="header">
-      <!-- Reemplaza por tu logo -->
       <img src="logo.png" alt="Logo">
-      <h2>Calculadora de Probabilidades de Goles RUSHAPO</h2>
+      <h2>Calculadora de Promedio de Goles RUSHAPO</h2>
     </div>
 
-    <label>xG del Equipo 1:</label>
-    <input type="number" id="xg1" step="0.01" placeholder="Ej: 1.98">
+    <label>xG a favor del Equipo 1:</label>
+    <input type="number" id="xgf1" step="0.01" placeholder="Ej: 1.98">
 
-    <label>xG del Equipo 2:</label>
-    <input type="number" id="xg2" step="0.01" placeholder="Ej: 0.49">
+    <label>xG en contra del Equipo 2:</label>
+    <input type="number" id="xga2" step="0.01" placeholder="Ej: 1.20">
+
+    <label>xG a favor del Equipo 2:</label>
+    <input type="number" id="xgf2" step="0.01" placeholder="Ej: 0.49">
+
+    <label>xG en contra del Equipo 1:</label>
+    <input type="number" id="xga1" step="0.01" placeholder="Ej: 1.70">
 
     <button class="calculate" onclick="calcularTodo()">Calcular</button>
 
@@ -132,37 +137,46 @@
     }
 
     function calcularTodo() {
-      const xg1 = parseFloat(document.getElementById('xg1').value);
-      const xg2 = parseFloat(document.getElementById('xg2').value);
-      const maxGoles = 5;
-      let res = '';
+      const xgf1 = parseFloat(document.getElementById('xgf1').value);
+      const xga1 = parseFloat(document.getElementById('xga1').value);
+      const xgf2 = parseFloat(document.getElementById('xgf2').value);
+      const xga2 = parseFloat(document.getElementById('xga2').value);
 
-      if (isNaN(xg1) || isNaN(xg2)) {
-        document.getElementById('resultados').innerHTML = "<p style='color:red;'>Introduce valores válidos para ambos equipos.</p>";
+      if ([xgf1, xga1, xgf2, xga2].some(isNaN)) {
+        document.getElementById('resultados').innerHTML = "<p style='color:red;'>Completa todos los campos con valores válidos.</p>";
         return;
       }
 
+      const lambda1 = (xgf1 + xga2) / 2;
+      const lambda2 = (xgf2 + xga1) / 2;
+      const maxGoles = 8;
+
       let probs1 = [], probs2 = [];
+
       for (let k = 0; k < maxGoles; k++) {
-        probs1[k] = poisson(k, xg1);
-        probs2[k] = poisson(k, xg2);
+        probs1[k] = poisson(k, lambda1);
+        probs2[k] = poisson(k, lambda2);
       }
-      probs1[5] = 1 - probs1.slice(0, 5).reduce((a, b) => a + b, 0);
-      probs2[5] = 1 - probs2.slice(0, 5).reduce((a, b) => a + b, 0);
+      probs1[maxGoles] = 1 - probs1.slice(0, maxGoles).reduce((a, b) => a + b, 0);
+      probs2[maxGoles] = 1 - probs2.slice(0, maxGoles).reduce((a, b) => a + b, 0);
 
-      res += `🔹 Probabilidades de goles del Equipo 1 (xG = ${xg1}):\n`;
-      for (let i = 0; i < 5; i++) res += `P(${i} goles) ≈ ${(probs1[i] * 100).toFixed(1)}%\n`;
-      res += `P(5+ goles) ≈ ${(probs1[5] * 100).toFixed(1)}%\n\n`;
+      let res = '';
+      res += `🔹 λ Equipo 1 = (${xgf1} + ${xga2}) / 2 = ${lambda1.toFixed(2)}\n`;
+      res += `🔹 λ Equipo 2 = (${xgf2} + ${xga1}) / 2 = ${lambda2.toFixed(2)}\n\n`;
 
-      res += `🔹 Probabilidades de goles del Equipo 2 (xG = ${xg2}):\n`;
-      for (let i = 0; i < 5; i++) res += `P(${i} goles) ≈ ${(probs2[i] * 100).toFixed(1)}%\n`;
-      res += `P(5+ goles) ≈ ${(probs2[5] * 100).toFixed(1)}%\n\n`;
+      res += `🔹 Probabilidades de goles del Equipo 1:\n`;
+      for (let i = 0; i < maxGoles; i++) res += `P(${i} goles) ≈ ${(probs1[i] * 100).toFixed(1)}%\n`;
+      res += `P(${maxGoles}+ goles) ≈ ${(probs1[maxGoles] * 100).toFixed(1)}%\n\n`;
 
-      res += `🔹 Combinaciones de Resultados (0 a 4 goles):\n`;
+      res += `🔹 Probabilidades de goles del Equipo 2:\n`;
+      for (let i = 0; i < maxGoles; i++) res += `P(${i} goles) ≈ ${(probs2[i] * 100).toFixed(1)}%\n`;
+      res += `P(${maxGoles}+ goles) ≈ ${(probs2[maxGoles] * 100).toFixed(1)}%\n\n`;
+
+      res += `🔹 Combinaciones de Resultados (0 a ${maxGoles - 1} goles):\n`;
       let victoria1 = 0, empate = 0, victoria2 = 0;
 
-      for (let g1 = 0; g1 <= 4; g1++) {
-        for (let g2 = 0; g2 <= 4; g2++) {
+      for (let g1 = 0; g1 < maxGoles; g1++) {
+        for (let g2 = 0; g2 < maxGoles; g2++) {
           const p = probs1[g1] * probs2[g2];
           res += `Resultado ${g1} - ${g2} ≈ ${(p * 100).toFixed(2)}%\n`;
           if (g1 > g2) victoria1 += p;
@@ -171,7 +185,7 @@
         }
       }
 
-      res += `\n🔹 Probabilidades Totales:\n`;
+      res += `\n🔹 Probabilidades Totales (sin contar ${maxGoles}+ goles):\n`;
       res += `Victoria Equipo 1: ${(victoria1 * 100).toFixed(2)}%\n`;
       res += `Empate: ${(empate * 100).toFixed(2)}%\n`;
       res += `Victoria Equipo 2: ${(victoria2 * 100).toFixed(2)}%\n`;
