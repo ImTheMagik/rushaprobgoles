@@ -1,199 +1,259 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Calculadora de Promedio de Goles Rushapo </title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora de Promedio de Goles RUSHAPO</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg-dark: #121212;
-      --text-dark: #f1f1f1;
-      --box-dark: #1e1e1e;
-      --primary: #3498db;
-      --primary-dark: #2980b9;
-    }
-
     body {
+      background-color: #18191a;
+      color: #f0f0f0;
       font-family: 'Poppins', sans-serif;
-      background-color: var(--bg-dark);
-      color: var(--text-dark);
-      margin: 0;
+      display: flex;
+      justify-content: center;
       padding: 20px;
+      min-height: 100vh;
     }
-
     .container {
-      max-width: 850px;
-      margin: auto;
-      background-color: var(--box-dark);
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+      max-width: 600px;
+      background: #23272b;
+      padding: 32px 28px 28px 28px;
+      border-radius: 18px;
+      box-shadow: 0 4px 32px 0 #000a, 0 1.5px 4px 0 #0006;
+      margin-top: 30px;
+      border: 1.5px solid #222326;
+      animation: fadeIn 0.7s;
     }
-
-    .header {
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h1 {
+      font-size: 24px;
       display: flex;
       align-items: center;
-      margin-bottom: 20px;
+      gap: 12px;
+      margin-bottom: 18px;
+      color: #e0e0e0;
+      letter-spacing: 0.5px;
     }
-
-    .header img {
-      width: 60px;
-      margin-right: 15px;
-    }
-
-    h2 {
-      font-size: 26px;
-      margin: 0;
-    }
-
     label {
-      margin-top: 15px;
+      margin-bottom: 6px;
       font-weight: 600;
-      display: block;
+      color: #bdbdbd;
     }
-
     input {
-      width: 100%;
-      padding: 12px;
-      margin-top: 5px;
+      padding: 10px 12px;
+      border: 1.5px solid #35363a;
       border-radius: 8px;
-      border: 1px solid #444;
-      font-size: 16px;
-      background-color: #2a2a2a;
-      color: white;
-    }
-
-    button.calculate {
-      background-color: var(--primary);
-      color: white;
-      border: none;
-      padding: 14px;
-      font-size: 16px;
-      border-radius: 12px;
-      margin-top: 25px;
-      cursor: pointer;
-      width: 100%;
-      transition: background-color 0.3s ease;
-    }
-
-    button.calculate:hover {
-      background-color: var(--primary-dark);
-    }
-
-    .result {
-      margin-top: 30px;
-      background-color: rgba(52, 152, 219, 0.15);
-      padding: 20px;
-      border-radius: 12px;
+      background-color: #23272b;
+      color: #fff;
+      margin-bottom: 18px;
       font-size: 15px;
-      white-space: pre-wrap;
+      transition: border 0.2s;
     }
-
-    @media (max-width: 600px) {
-      h2 {
-        font-size: 22px;
-      }
-      .header img {
-        width: 45px;
-      }
+    input:focus {
+      outline: none;
+      border: 1.5px solid #00b894;
+      background-color: #23272b;
+    }
+    button {
+      padding: 12px 28px;
+      background: linear-gradient(90deg, #00b894 60%, #00cec9 100%);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+      box-shadow: 0 2px 8px #00b89433;
+      transition: background 0.2s, transform 0.1s;
+    }
+    button:hover {
+      background: linear-gradient(90deg, #00cec9 60%, #00b894 100%);
+      transform: translateY(-2px) scale(1.03);
+    }
+    .result {
+      margin-top: 28px;
+      background-color: #23272b;
+      padding: 20px 18px;
+      border-radius: 12px;
+      border: 1.5px solid #35363a;
+      box-shadow: 0 2px 12px #0005;
+      font-size: 15.5px;
+      color: #e0e0e0;
+      min-height: 80px;
+      animation: fadeIn 0.7s;
+    }
+    .result-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 18px 0;
+      background: #23272b;
+    }
+    .result-table th, .result-table td {
+      border: 1px solid #35363a;
+      padding: 7px 10px;
+      text-align: center;
+      color: #e0e0e0;
+    }
+    .result-table th {
+      background: #18191a;
+      color: #00b894;
+      font-weight: 600;
+    }
+    .result-table tr:nth-child(even) {
+      background: #23272b;
+    }
+    .result-table tr:nth-child(odd) {
+      background: #23272b;
+    }
+    img.logo {
+      height: 70px;
+      filter: drop-shadow(0 2px 6px #00b89455);
     }
   </style>
 </head>
 <body>
-
   <div class="container">
-    <div class="header">
-      <img src="logo.png" alt="Logo">
-      <h2>Calculadora de Promedio de Goles RUSHAPO</h2>
-    </div>
+    <h1><img src="logo.png" alt="Logo" class="logo"> Calculadora de Promedio de Goles RUSHAPO</h1>
 
-    <label>xG a favor del Equipo 1:</label>
-    <input type="number" id="xgf1" step="0.01" placeholder="Ej: 1.98">
+    <form id="formulario" onsubmit="event.preventDefault(); calcularTodo();">
+      <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+        <div style="flex: 1 1 220px; min-width: 180px;">
+          <label for="xgf1">xG a favor del Equipo 1:</label>
+          <input type="number" id="xgf1" step="0.01" placeholder="Ej: 1.98">
+        </div>
+        <div style="flex: 1 1 220px; min-width: 180px;">
+          <label for="xga1">xG en contra del Equipo 1:</label>
+          <input type="number" id="xga1" step="0.01" placeholder="Ej: 1.70">
+        </div>
+      </div>
+      <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+        <div style="flex: 1 1 220px; min-width: 180px;">
+          <label for="xgf2">xG a favor del Equipo 2:</label>
+          <input type="number" id="xgf2" step="0.01" placeholder="Ej: 0.49">
+        </div>
+        <div style="flex: 1 1 220px; min-width: 180px;">
+          <label for="xga2">xG en contra del Equipo 2:</label>
+          <input type="number" id="xga2" step="0.01" placeholder="Ej: 1.20">
+        </div>
+      </div>
 
-    <label>xG en contra del Equipo 1:</label>
-    <input type="number" id="xga1" step="0.01" placeholder="Ej: 1.70">
+      <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px;">
+        <button type="submit">Calcular</button>
+        <button type="button" onclick="limpiarFormulario()" style="background: #35363a; color: #fff;">Limpiar</button>
+      </div>
+    </form>
+    <div class="result" id="resultado"></div>
+    <script>
+          function limpiarFormulario() {
+      document.getElementById('xgf1').value = '';
+      document.getElementById('xga1').value = '';
+      document.getElementById('xgf2').value = '';
+      document.getElementById('xga2').value = '';
+      document.getElementById('resultado').innerHTML = '';
+    }
+    </script>
 
-    <label>xG a favor del Equipo 2:</label>
-    <input type="number" id="xgf2" step="0.01" placeholder="Ej: 0.49">
-
-    <label>xG en contra del Equipo 2:</label>
-    <input type="number" id="xga2" step="0.01" placeholder="Ej: 1.20">
-
-
-    <button class="calculate" onclick="calcularTodo()">Calcular</button>
-
-    <div id="resultados" class="result"></div>
   </div>
 
   <script>
     function factorial(n) {
-      if (n === 0 || n === 1) return 1;
-      let res = 1;
-      for (let i = 2; i <= n; i++) res *= i;
-      return res;
+      return n === 0 ? 1 : n * factorial(n - 1);
     }
 
     function poisson(k, lambda) {
-      return (Math.pow(Math.E, -lambda) * Math.pow(lambda, k)) / factorial(k);
+      return (Math.exp(-lambda) * Math.pow(lambda, k)) / factorial(k);
+    }
+
+    function calcularProbabilidades(lambda, maxGoles) {
+      let probs = [];
+      let total = 0;
+      for (let k = 0; k < maxGoles; k++) {
+        let p = poisson(k, lambda);
+        probs.push(p);
+        total += p;
+      }
+      probs.push(1 - total); // P(5+ goles o más)
+      return probs;
+    }
+
+    function calcularOverUnderLines(probArray) {
+      let results = [];
+      for (let line = 0.5; line <= 4.5; line += 1.0) {
+        let cutoff = Math.floor(line);
+        let underProb = 0;
+        for (let i = 0; i <= cutoff; i++) {
+          underProb += probArray[i] || 0;
+        }
+        let overProb = 1 - underProb;
+        results.push(`Más de ${line} goles: ${(overProb * 100).toFixed(2)}%`);
+        results.push(`Menos de ${line} goles: ${(underProb * 100).toFixed(2)}%`);
+      }
+      return results;
     }
 
     function calcularTodo() {
-      const xgf1 = parseFloat(document.getElementById('xgf1').value);
-      const xga1 = parseFloat(document.getElementById('xga1').value);
-      const xgf2 = parseFloat(document.getElementById('xgf2').value);
-      const xga2 = parseFloat(document.getElementById('xga2').value);
-
-      if ([xgf1, xga1, xgf2, xga2].some(isNaN)) {
-        document.getElementById('resultados').innerHTML = "<p style='color:red;'>Completa todos los campos con valores válidos.</p>";
-        return;
-      }
+      const maxGoles = 8;
+      const xgf1 = parseFloat(document.getElementById("xgf1").value);
+      const xga1 = parseFloat(document.getElementById("xga1").value);
+      const xgf2 = parseFloat(document.getElementById("xgf2").value);
+      const xga2 = parseFloat(document.getElementById("xga2").value);
 
       const lambda1 = (xgf1 + xga2) / 2;
       const lambda2 = (xgf2 + xga1) / 2;
-      const maxGoles = 8;
 
-      let probs1 = [], probs2 = [];
+      const p1 = calcularProbabilidades(lambda1, maxGoles);
+      const p2 = calcularProbabilidades(lambda2, maxGoles);
 
-      for (let k = 0; k < maxGoles; k++) {
-        probs1[k] = poisson(k, lambda1);
-        probs2[k] = poisson(k, lambda2);
+      let r = `<div style='margin-bottom:10px;'>`;
+      r += `🔹 λ Equipo 1 = (${xgf1} + ${xga2}) / 2 = <b>${lambda1.toFixed(2)}</b><br>`;
+      r += `🔹 λ Equipo 2 = (${xgf2} + ${xga1}) / 2 = <b>${lambda2.toFixed(2)}</b><br><br>`;
+      r += `🔹 <b>Probabilidades de goles del Equipo 1</b> (xG = ${lambda1.toFixed(2)}):<br>`;
+      for (let i = 0; i < maxGoles - 1; i++) r += `P(${i} goles) ≈ <b>${(p1[i] * 100).toFixed(2)}%</b><br>`;
+      r += `P(${maxGoles - 1}+ goles) ≈ <b>${(p1[maxGoles - 1] * 100).toFixed(2)}%</b><br><br>`;
+      r += `🔹 <b>Probabilidades de goles del Equipo 2</b> (xG = ${lambda2.toFixed(2)}):<br>`;
+      for (let i = 0; i < maxGoles - 1; i++) r += `P(${i} goles) ≈ <b>${(p2[i] * 100).toFixed(2)}%</b><br>`;
+      r += `P(${maxGoles - 1}+ goles) ≈ <b>${(p2[maxGoles - 1] * 100).toFixed(2)}%</b><br><br>`;
+      r += `🔹 <b>Línea de goles esperados (Equipo 1):</b><br>` + generarTablaOverUnder(p1) + `<br>`;
+      r += `🔹 <b>Línea de goles esperados (Equipo 2):</b><br>` + generarTablaOverUnder(p2) + `<br>`;
+      r += `</div>`;
+    // Genera una tabla HTML para mostrar over/under de forma más visual
+    function generarTablaOverUnder(probArray) {
+      let rows = '';
+      for (let line = 0.5; line <= 4.5; line += 1.0) {
+        let cutoff = Math.floor(line);
+        let underProb = 0;
+        for (let i = 0; i <= cutoff; i++) {
+          underProb += probArray[i] || 0;
+        }
+        let overProb = 1 - underProb;
+        rows += `<tr><td>Más de ${line}</td><td>${(overProb * 100).toFixed(2)}%</td></tr>`;
+        rows += `<tr><td>Menos de ${line}</td><td>${(underProb * 100).toFixed(2)}%</td></tr>`;
       }
-      probs1[maxGoles] = 1 - probs1.slice(0, maxGoles).reduce((a, b) => a + b, 0);
-      probs2[maxGoles] = 1 - probs2.slice(0, maxGoles).reduce((a, b) => a + b, 0);
+      return `<table class='result-table'><thead><tr><th>Línea</th><th>Probabilidad</th></tr></thead><tbody>${rows}</tbody></table>`;
+    }
 
-      let res = '';
-      res += `🔹 λ Equipo 1 = (${xgf1} + ${xga2}) / 2 = ${lambda1.toFixed(2)}\n`;
-      res += `🔹 λ Equipo 2 = (${xgf2} + ${xga1}) / 2 = ${lambda2.toFixed(2)}\n\n`;
-
-      res += `🔹 Probabilidades de goles del Equipo 1:\n`;
-      for (let i = 0; i < maxGoles; i++) res += `P(${i} goles) ≈ ${(probs1[i] * 100).toFixed(1)}%\n`;
-      res += `P(${maxGoles}+ goles) ≈ ${(probs1[maxGoles] * 100).toFixed(1)}%\n\n`;
-
-      res += `🔹 Probabilidades de goles del Equipo 2:\n`;
-      for (let i = 0; i < maxGoles; i++) res += `P(${i} goles) ≈ ${(probs2[i] * 100).toFixed(1)}%\n`;
-      res += `P(${maxGoles}+ goles) ≈ ${(probs2[maxGoles] * 100).toFixed(1)}%\n\n`;
-
-      res += `🔹 Combinaciones de Resultados (0 a ${maxGoles - 1} goles):\n`;
-      let victoria1 = 0, empate = 0, victoria2 = 0;
-
+      let win1 = 0, draw = 0, win2 = 0;
       for (let g1 = 0; g1 < maxGoles; g1++) {
         for (let g2 = 0; g2 < maxGoles; g2++) {
-          const p = probs1[g1] * probs2[g2];
-          res += `Resultado ${g1} - ${g2} ≈ ${(p * 100).toFixed(2)}%\n`;
-          if (g1 > g2) victoria1 += p;
-          else if (g1 === g2) empate += p;
-          else victoria2 += p;
+          let prob = p1[g1] * p2[g2];
+          if (g1 > g2) win1 += prob;
+          else if (g1 === g2) draw += prob;
+          else win2 += prob;
         }
       }
 
-      res += `\n🔹 Probabilidades Totales (sin contar ${maxGoles}+ goles):\n`;
-      res += `Victoria Equipo 1: ${(victoria1 * 100).toFixed(2)}%\n`;
-      res += `Empate: ${(empate * 100).toFixed(2)}%\n`;
-      res += `Victoria Equipo 2: ${(victoria2 * 100).toFixed(2)}%\n`;
+      r += `<b>🔹 Probabilidades Totales:</b><br>`;
+      r += `Victoria Equipo 1: <b>${(win1 * 100).toFixed(2)}%</b><br>`;
+      r += `Empate: <b>${(draw * 100).toFixed(2)}%</b><br>`;
+      r += `Victoria Equipo 2: <b>${(win2 * 100).toFixed(2)}%</b>`;
 
-      document.getElementById('resultados').innerHTML = res;
+      document.getElementById("resultado").innerHTML = r;
     }
   </script>
-
 </body>
 </html>
